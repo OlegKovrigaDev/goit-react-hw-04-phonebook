@@ -1,26 +1,24 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 
-export default class ContactForm extends Component {
-  state = {
+export const ContactForm = ({ checkContactName, addContact }) => {
+  const [formData, setFormData] = useState({
     name: '',
     number: '',
-  };
+  });
 
-  handleChange = e => {
+  const { name, number } = formData;
+
+  const handleChange = e => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    const { name, number } = this.state;
-    const { checkContactName, addContact } = this.props;
+    checkContactName(name);
 
-    checkContactName(name)
-
-    // Додавання нового контакту
     const newContact = {
       id: nanoid(),
       name,
@@ -29,39 +27,38 @@ export default class ContactForm extends Component {
 
     addContact(newContact);
 
-    // Очищення полів форми після додавання контакту
-    this.setState({ name: '', number: '' });
+    setFormData({ name: '', number: '' });
   };
 
-  render() {
-    const { name, number } = this.state;
+  useEffect(() => {
+    setFormData({ name: '', number: '' });
+  }, [addContact]);
 
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={name}
-            onChange={this.handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Number:
-          <input
-            type="tel"
-            name="number"
-            value={number}
-            onChange={this.handleChange}
-            required
-          />
-        </label>
-        <br />
-        <button type="submit">Add contact</button>
-      </form>
-    );
-  }
-}
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Name:
+        <input
+          type="text"
+          name="name"
+          value={name}
+          onChange={handleChange}
+          required
+        />
+      </label>
+      <br />
+      <label>
+        Number:
+        <input
+          type="tel"
+          name="number"
+          value={number}
+          onChange={handleChange}
+          required
+        />
+      </label>
+      <br />
+      <button type="submit">Add contact</button>
+    </form>
+  );
+};

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 
 export const ContactForm = ({ checkContactName, addContact }) => {
@@ -29,10 +29,6 @@ export const ContactForm = ({ checkContactName, addContact }) => {
 
     setFormData({ name: '', number: '' });
   };
-
-  useEffect(() => {
-    setFormData({ name: '', number: '' });
-  }, [addContact]);
 
   return (
     <form onSubmit={handleSubmit}>

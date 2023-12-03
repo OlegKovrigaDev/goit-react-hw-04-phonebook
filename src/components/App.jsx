@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Filter from 'components/Filter/Filter';
 import ContactList from 'components/ContactList/ContactList';
 import { ContactForm } from 'components/ContactForm/ContactForm';
@@ -7,19 +7,19 @@ export const App = () => {
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
 
-  const addContact = useCallback(contact => {
+  const addContact = contact => {
     setContacts(prevContacts => [...prevContacts, contact]);
-  }, []);
+  };
 
-  const filterChange = useCallback(e => {
+  const filterChange = e => {
     setFilter(e.target.value);
-  }, []);
+  };
 
-  const deleteContact = useCallback(contactId => {
+  const deleteContact = contactId => {
     setContacts(prevContacts =>
       prevContacts.filter(contact => contact.id !== contactId)
     );
-  }, []);
+  };
 
   useEffect(() => {
     const savedContacts = localStorage.getItem('contacts');
@@ -36,15 +36,12 @@ export const App = () => {
     contact.name.toLowerCase().includes(filter.toLowerCase())
   );
 
-  const checkContactName = useCallback(
-    name => {
-      if (contacts.some(contact => contact.name === name)) {
-        alert(`${name} is already in contacts.`);
-        return;
-      }
-    },
-    [contacts]
-  );
+  const checkContactName = name => {
+    if (contacts.some(contact => contact.name === name)) {
+      alert(`${name} is already in contacts.`);
+      return;
+    }
+  };
 
   return (
     <div
